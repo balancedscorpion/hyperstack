@@ -38,6 +38,15 @@ def get_environment(environment_id):
     """
     return hyperstack._request("GET", f"core/environments/{environment_id}")
 
+def set_environment(environment_id):
+    """
+    Retrieves details of a specific environment.
+
+    :param environment_id: The ID of the environment to retrieve.
+    :return: The response from the API call.
+    """
+    return hyperstack._request("GET", f"core/environments/{environment_id}")
+
 def delete_environment(environment_id):
     """
     Deletes a specific environment.
