@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hyperstack"
-version = "0.2.0"
+version = "0.2.1"
 description = "A Python wrapper for the Hyperstack API"
 authors = ["Jamie Martin"]
 license = "Apache License 2.0"
