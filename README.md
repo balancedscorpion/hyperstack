@@ -17,30 +17,28 @@ HYPERSTACK_API_KEY=<your API Key>
 ```
 
 ```python
-from hyperstack import Hyperstack
-
-client = Hyperstack()
+import hypersatck
 ```
 
 #### Create an environment if you don't have one
 
 ```python
-client.create_environment('development')  
+client.create_environment('your-environment-name')  
 ```
 
 #### Set your environment
 
 ```python
-client.set_environment('development')  
+client.set_environment('your-environment-name')  
 ```
 
 #### Create a VM
 ```python
 client.create_vm(
-        name='first vm', 
+        name='first-vm', 
         image_name="Ubuntu Server 22.04 LTS R535 CUDA 12.2", 
         flavor_name='n2-RTX-A5000x1', 
-        key_name="development-key", 
+        key_name="your-key", 
         user_data="", 
         create_bootable_volume=False, 
         assign_floating_ip=False, 
