@@ -17,7 +17,7 @@ HYPERSTACK_API_KEY=<your API Key>
 ```
 
 ```python
-import hypersatck
+import hyperstack
 ```
 
 #### Create an environment if you don't have one
