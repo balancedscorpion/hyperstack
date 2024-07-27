@@ -1,4 +1,4 @@
-from ..instance import hyperstack
+from .. import hyperstack
 
 def attach_public_ip(vm_id):
     hyperstack._check_environment_set()

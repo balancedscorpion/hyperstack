@@ -1,5 +1,5 @@
 import pytest
-from hyperstack.instance import hyperstack
+from hyperstack import hyperstack
 
 @pytest.fixture
 def mock_api_key(monkeypatch):

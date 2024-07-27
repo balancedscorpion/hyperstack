@@ -1,4 +1,4 @@
-from ..instance import hyperstack
+from .. import hyperstack
 
 def create_vm(name, image_name, flavor_name, key_name="development-key", user_data="", create_bootable_volume=False, assign_floating_ip=False, count=1):
     hyperstack._check_environment_set()

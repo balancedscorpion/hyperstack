@@ -1,4 +1,4 @@
-from ..instance import hyperstack
+from .. import hyperstack
 from .regions import Region, get_region_enum
 
 def create_environment(name, region_str):

@@ -1,4 +1,4 @@
-from ..instance import hyperstack
+from .. import hyperstack
 from .regions import Region
 
 def list_flavors(region=None):

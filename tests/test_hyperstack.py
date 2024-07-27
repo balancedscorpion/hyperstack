@@ -1,5 +1,5 @@
 import pytest
-from hyperstack.instance import hyperstack
+from hyperstack import hyperstack
 from hyperstack.api import environments, virtual_machines, volumes, network, profiles, regions, flavors, images, stock
 from unittest.mock import patch
 from hyperstack.api.regions import Region, get_region_enum

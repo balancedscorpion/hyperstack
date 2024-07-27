@@ -1,4 +1,4 @@
-from ..instance import hyperstack
+from .. import hyperstack
 
 def retrieve_gpu_stock():
     """

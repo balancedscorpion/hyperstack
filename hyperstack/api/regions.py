@@ -1,4 +1,4 @@
-from ..instance import hyperstack
+from .. import hyperstack
 from enum import Enum
 
 class Region(Enum):
