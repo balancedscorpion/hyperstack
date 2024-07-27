@@ -4,4 +4,4 @@ from . import profiles
 from . import regions
 from . import environments
 
-__all__ = ['virtual_machines', 'volumes', 'profiles', 'regions', 'environments']
+__all__ = ['virtual_machines', 'network', 'volumes', 'profiles', 'regions', 'environments', 'stock', 'flavors', 'regions']

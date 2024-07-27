@@ -1,5 +1,5 @@
 import pytest
-from hyperstack import Hyperstack
+from hyperstack.instance import hyperstack
 
 @pytest.fixture
 def mock_api_key(monkeypatch):
@@ -7,7 +7,7 @@ def mock_api_key(monkeypatch):
 
 @pytest.fixture
 def hyperstack_client(mock_api_key):
-    return Hyperstack()
+    return hyperstack
 
 @pytest.fixture
 def mock_requests_post(mocker):
@@ -20,3 +20,7 @@ def mock_requests_get(mocker):
 @pytest.fixture
 def mock_requests_delete(mocker):
     return mocker.patch("requests.delete")
+
+@pytest.fixture
+def mock_requests_put(mocker):
+    return mocker.patch("requests.put")

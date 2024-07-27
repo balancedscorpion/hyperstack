@@ -1,9 +1,5 @@
-from ..client import hyperstack
-from enum import Enum
-
-class Region(Enum):
-    NORWAY_1 = "NORWAY-1"
-    CANADA_1 = "CANADA-1"
+from ..instance import hyperstack
+from .regions import Region
 
 def list_images(region=None):
     """

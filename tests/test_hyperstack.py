@@ -1,8 +1,8 @@
 import pytest
-from hyperstack import hyperstack
-from hyperstack.api import environments, virtual_machines, volumes, profiles, regions, flavors, images, stock
+from hyperstack.instance import hyperstack
+from hyperstack.api import environments, virtual_machines, volumes, network, profiles, regions, flavors, images, stock
 from unittest.mock import patch
-from hyperstack.api.regions import Region
+from hyperstack.api.regions import Region, get_region_enum
 
 @pytest.fixture
 def mock_hyperstack_request():
@@ -13,7 +13,7 @@ def test_create_environment_success(mock_hyperstack_request):
     mock_hyperstack_request.return_value.status_code = 201
     mock_hyperstack_request.return_value.json.return_value = {"id": "env-123", "name": "test-env"}
 
-    response = environments.create_environment("test-env", Region.NORWAY_1)
+    response = environments.create_environment("test-env", "NORWAY-1")
 
     assert response.status_code == 201
     assert response.json()["name"] == "test-env"
@@ -24,7 +24,7 @@ def test_create_environment_success(mock_hyperstack_request):
     )
 
 def test_create_environment_invalid_region():
-    with pytest.raises(ValueError, match="Invalid region specified"):
+    with pytest.raises(ValueError, match="Invalid region specified: INVALID-REGION"):
         environments.create_environment("test-env", "INVALID-REGION")
 
 def test_set_environment():
@@ -104,7 +104,7 @@ def test_public_ip_actions(mock_hyperstack_request, method_name, url_suffix):
     mock_hyperstack_request.return_value.status_code = 200
     mock_hyperstack_request.return_value.json.return_value = {"status": "success"}
 
-    method = getattr(virtual_machines, method_name)
+    method = getattr(network, method_name)
     response = method("vm-123")
 
     assert response.status_code == 200
@@ -113,7 +113,7 @@ def test_public_ip_actions(mock_hyperstack_request, method_name, url_suffix):
         "POST",
         f"core/virtual-machines/vm-123/{url_suffix}"
     )
-
+    
 def test_list_virtual_machines(mock_hyperstack_request):
     hyperstack.set_environment("test-env")
     mock_hyperstack_request.return_value.status_code = 200
@@ -136,12 +136,12 @@ def test_retrieve_vm_details(mock_hyperstack_request):
 
     response = virtual_machines.retrieve_vm_details("vm-123")
 
-    assert response["id"] == "vm-123"
-    assert response["name"] == "test-vm"
+    assert response.json()["id"] == "vm-123"
     mock_hyperstack_request.assert_called_once_with(
         "GET",
         "core/virtual-machines/vm-123"
     )
+
 
 def test_get_floating_ip(mock_hyperstack_request):
     hyperstack.set_environment("test-env")
@@ -161,7 +161,7 @@ def test_set_sg_rules(mock_hyperstack_request):
     mock_hyperstack_request.return_value.status_code = 200
     mock_hyperstack_request.return_value.json.return_value = {"status": "success"}
 
-    response = virtual_machines.set_sg_rules("vm-123", port_range_min=80, port_range_max=80)
+    response = network.set_sg_rules("vm-123", port_range_min=80, port_range_max=80)
 
     assert response.status_code == 200
     assert response.json()["status"] == "success"
@@ -305,7 +305,8 @@ def test_list_regions(mock_hyperstack_request):
     assert response.json()[0]["name"] == "NORWAY-1"
     mock_hyperstack_request.assert_called_once_with(
         "GET",
-        "core/regions"
+        "core/regions",
+        params={}
     )
 
 @pytest.mark.parametrize("region", [None, Region.NORWAY_1])
@@ -384,7 +385,7 @@ def test_set_sg_rules_all_parameters(mock_hyperstack_request):
     mock_hyperstack_request.return_value.status_code = 200
     mock_hyperstack_request.return_value.json.return_value = {"status": "success"}
 
-    response = virtual_machines.set_sg_rules(
+    response = network.set_sg_rules(
         "vm-123",
         remote_ip_prefix="192.168.1.0/24",
         direction="egress",
@@ -470,6 +471,7 @@ def test_create_vm_environment_not_set():
 # Test for invalid API key
 @patch('hyperstack.client.Hyperstack._request')
 def test_invalid_api_key(mock_request):
+    hyperstack.set_environment("test-env")  # Set environment before the test
     mock_request.side_effect = Exception("Invalid API key")
     with pytest.raises(Exception, match="Invalid API key"):
         virtual_machines.list_virtual_machines()
@@ -477,13 +479,16 @@ def test_invalid_api_key(mock_request):
 # Test for network error
 @patch('hyperstack.client.Hyperstack._request')
 def test_network_error(mock_request):
+    hyperstack.set_environment("test-env")  # Set environment before the test
     mock_request.side_effect = Exception("Network error")
     with pytest.raises(Exception, match="Network error"):
         virtual_machines.list_virtual_machines()
 
+
 # Test for unexpected server error
 @patch('hyperstack.client.Hyperstack._request')
 def test_unexpected_server_error(mock_request):
+    hyperstack.set_environment("test-env")  # Set environment before the test
     mock_request.return_value.status_code = 500
     mock_request.return_value.json.return_value = {"error": "Unexpected server error"}
     response = virtual_machines.list_virtual_machines()

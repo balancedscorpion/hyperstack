@@ -1,4 +1,4 @@
-from ..client import hyperstack
+from ..instance import hyperstack
 
 def create_profile(name, environment_name, image_name, flavor_name, key_name, count,
                    assign_floating_ip=False, create_bootable_volume=False, user_data="",

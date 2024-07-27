@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "hyperstack-cloud"
+name = "hyperstack"
 version = "0.1.0"
 description = "A Python wrapper for the Hyperstack API"
 authors = ["Jamie Martin"]
 license = "Apache License 2.0"
 readme = "README.md"
-packages = [{include = "hyperstack", from = "src"}]  # Update this line
+
 homepage = "https://github.com/balancedscorpion/hyperstack-python"
 repository = "https://github.com/balancedscorpion/hyperstack-python"
 keywords = ["api", "wrapper", "hyperstack", "GPU"]
@@ -18,6 +18,10 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+]
+
+packages = [
+    { include = "hyperstack" },
 ]
 
 [tool.poetry.dependencies]
@@ -33,6 +37,4 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
-pythonpath = [
-  "src"
-]
+pythonpath = ["."]

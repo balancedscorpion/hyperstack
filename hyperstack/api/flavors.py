@@ -1,5 +1,4 @@
-from ..client import hyperstack
-from enum import Enum
+from ..instance import hyperstack
 from .regions import Region
 
 def list_flavors(region=None):

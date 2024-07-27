@@ -1,4 +1,5 @@
-from ..client import hyperstack
+from ..instance import hyperstack
+from enum import Enum
 
 class Region(Enum):
     NORWAY_1 = "NORWAY-1"

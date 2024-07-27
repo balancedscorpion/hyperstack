@@ -1,4 +1,4 @@
-from ..client import hyperstack
+from ..instance import hyperstack
 
 def create_volume(name, volume_type, size=50, image_id=None, description=None, callback_url=None):
     """

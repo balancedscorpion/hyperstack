@@ -1,4 +1,4 @@
-from ..client import hyperstack
+from ..instance import hyperstack
 
 def create_vm(name, image_name, flavor_name, key_name="development-key", user_data="", create_bootable_volume=False, assign_floating_ip=False, count=1):
     hyperstack._check_environment_set()
@@ -25,10 +25,6 @@ def retrieve_vm_details(vm_id):
     hyperstack._check_environment_set()
     return hyperstack._request("GET", f"core/virtual-machines/{vm_id}")
 
-def get_floating_ip(vm_id):
-    response = retrieve_vm_details(vm_id)
-    return response.json()['instance']['floating_ip']
-
 def start_virtual_machine(vm_id):
     hyperstack._check_environment_set()
     return hyperstack._request("GET", f"core/virtual-machines/{vm_id}/start")
@@ -53,27 +49,25 @@ def delete_virtual_machine(vm_id):
     hyperstack._check_environment_set()
     return hyperstack._request("DELETE", f"core/virtual-machines/{vm_id}")
 
-def attach_public_ip(vm_id):
+def resize_virtual_machine(vm_id, flavor):
     hyperstack._check_environment_set()
-    return hyperstack._request("POST", f"core/virtual-machines/{vm_id}/attach-floatingip")
+    payload = {}
+    payload['flavor_name']= flavor
+    return hyperstack._request("POST", f"core/virtual-machines/{vm_id}/resize")
 
-def detach_public_ip(vm_id):
+def update_virtual_machine_labels(vm_id, labels: list):
     hyperstack._check_environment_set()
-    return hyperstack._request("POST", f"core/virtual-machines/{vm_id}/detach-floatingip")
+    payload = {}
+    payload['labels']= labels
+    return hyperstack._request("PUT", f"core/virtual-machines/{vm_id}/label")
 
-def set_sg_rules(vm_id, remote_ip_prefix="0.0.0.0/0", direction="ingress", ethertype="IPv4", protocol="tcp", port_range_min=None, port_range_max=None):
-    hyperstack._check_environment_set()
-    
-    payload = {
-        "remote_ip_prefix": remote_ip_prefix,
-        "direction": direction,
-        "ethertype": ethertype,
-        "protocol": protocol
-    }
-    
-    if port_range_min is not None:
-        payload["port_range_min"] = port_range_min
-    if port_range_max is not None:
-        payload["port_range_max"] = port_range_max
-    
-    return hyperstack._request("POST", f"core/virtual-machines/{vm_id}/sg-rules", json=payload)
+def get_floating_ip(vm_id):
+    response = retrieve_vm_details(vm_id)
+    return response.json()['instance']['floating_ip']
+
+
+
+
+
+
+

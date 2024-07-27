@@ -1,22 +1,25 @@
-from ..client import hyperstack
+from ..instance import hyperstack
+from .regions import Region, get_region_enum
 
-def create_environment(name, region):
+def create_environment(name, region_str):
     """
     Creates a new environment with the given name and region.
 
     :param name: The name of the environment.
-    :param region: The region where the environment will be created.
+    :param region_str: The region where the environment will be created (string).
     :return: The response from the API call.
     """
-    if region not in hyperstack.valid_regions:
-        raise ValueError(f"Invalid region specified. Valid regions are: {', '.join(hyperstack.valid_regions)}")
+    try:
+        region = get_region_enum(region_str)
+    except ValueError as e:
+        raise ValueError(f"Invalid region specified: {region_str}. {str(e)}")
     
-    payload = {
+    payload={
         "name": name,
-        "region": region
+        "region": region.value
     }
-    
-    return hyperstack._request("POST", "core/environments", json=payload)
+
+    return hyperstack._request("POST","core/environments",json=payload)
 
 def list_environments():
     """
@@ -52,8 +55,7 @@ def update_environment(environment_id, name):
     :param name: (Optional) The new name for the environment.
     """
     payload = {}
-    if name is not None:
-        payload["name"] = name
+    payload["name"] = name
 
     return hyperstack._request("PUT", f"core/environments/{environment_id}", json=payload)
 
