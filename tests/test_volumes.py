@@ -1,7 +1,9 @@
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import patch, MagicMock
-from hyperstack import Hyperstack
-from hyperstack.api.volumes import create_volume, list_volumes, list_volume_types, get_volume, delete_volume
+
+from hyperstack.api.volumes import create_volume, delete_volume, get_volume, list_volume_types, list_volumes
+
 
 @pytest.fixture
 def mock_hyperstack():
@@ -14,16 +16,13 @@ def mock_hyperstack():
         mock_instance._check_environment_set = MagicMock()
         yield mock_instance
 
+
 def test_create_volume(mock_hyperstack):
     result = create_volume(mock_hyperstack, name="test-volume", volume_type="ssd", size=100)
-    expected_payload = {
-        "name": "test-volume",
-        "environment_name": "test-env",
-        "volume_type": "ssd",
-        "size": 100
-    }
+    expected_payload = {"name": "test-volume", "environment_name": "test-env", "volume_type": "ssd", "size": 100}
     mock_hyperstack.post.assert_called_once_with("core/volumes", data=expected_payload)
     assert result == {"status": "success", "data": {"id": "volume-123"}}
+
 
 def test_create_volume_with_optional_params(mock_hyperstack):
     result = create_volume(
@@ -33,7 +32,7 @@ def test_create_volume_with_optional_params(mock_hyperstack):
         size=100,
         image_id="image-123",
         description="Test volume",
-        callback_url="https://example.com/callback"
+        callback_url="https://example.com/callback",
     )
     expected_payload = {
         "name": "test-volume",
@@ -42,30 +41,35 @@ def test_create_volume_with_optional_params(mock_hyperstack):
         "size": 100,
         "image_id": "image-123",
         "description": "Test volume",
-        "callback_url": "https://example.com/callback"
+        "callback_url": "https://example.com/callback",
     }
     mock_hyperstack.post.assert_called_once_with("core/volumes", data=expected_payload)
     assert result == {"status": "success", "data": {"id": "volume-123"}}
+
 
 def test_list_volumes(mock_hyperstack):
     result = list_volumes(mock_hyperstack)
     mock_hyperstack.get.assert_called_once_with("core/volumes")
     assert result == {"status": "success", "data": {}}
 
+
 def test_list_volume_types(mock_hyperstack):
     result = list_volume_types(mock_hyperstack)
     mock_hyperstack.get.assert_called_once_with("core/volume-types")
     assert result == {"status": "success", "data": {}}
+
 
 def test_get_volume(mock_hyperstack):
     result = get_volume(mock_hyperstack, "volume-123")
     mock_hyperstack.get.assert_called_once_with("core/volumes/volume-123")
     assert result == {"status": "success", "data": {}}
 
+
 def test_delete_volume(mock_hyperstack):
     result = delete_volume(mock_hyperstack, "volume-123")
     mock_hyperstack.delete.assert_called_once_with("core/volumes/volume-123")
     assert result == {"status": "success", "data": {}}
+
 
 def test_environment_not_set(mock_hyperstack):
     mock_hyperstack.environment = None

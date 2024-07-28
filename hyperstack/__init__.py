@@ -1,5 +1,5 @@
-from .client import Hyperstack
 from .api.regions import Region
+from .client import Hyperstack
 
 # Singleton instance
 _hyperstack = Hyperstack()

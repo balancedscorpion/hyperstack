@@ -1,11 +1,17 @@
+from unittest.mock import MagicMock, call, patch
+
 import pytest
-from unittest.mock import patch, MagicMock, call
-import time
-from hyperstack import Hyperstack
+
 from hyperstack.api.network import (
-    attach_public_ip, detach_public_ip, set_sg_rules, delete_sg_rules,
-    retrieve_vnc_path, retrieve_vnc_url, _execute_with_backoff
+    _execute_with_backoff,
+    attach_public_ip,
+    delete_sg_rules,
+    detach_public_ip,
+    retrieve_vnc_path,
+    retrieve_vnc_url,
+    set_sg_rules,
 )
+
 
 @pytest.fixture
 def mock_hyperstack():
@@ -18,15 +24,18 @@ def mock_hyperstack():
         mock_instance._check_environment_set = MagicMock()
         yield mock_instance
 
+
 def test_attach_public_ip(mock_hyperstack):
     result = attach_public_ip(mock_hyperstack, "vm-123")
     mock_hyperstack.post.assert_called_once_with("core/virtual-machines/vm-123/attach-floatingip")
     assert result == {"status": "success", "data": {}}
 
+
 def test_detach_public_ip(mock_hyperstack):
     result = detach_public_ip(mock_hyperstack, "vm-123")
     mock_hyperstack.post.assert_called_once_with("core/virtual-machines/vm-123/detach-floatingip")
     assert result == {"status": "success", "data": {}}
+
 
 def test_set_sg_rules(mock_hyperstack):
     result = set_sg_rules(mock_hyperstack, "vm-123", port_range_min=80, port_range_max=80)
@@ -36,25 +45,29 @@ def test_set_sg_rules(mock_hyperstack):
         "ethertype": "IPv4",
         "protocol": "tcp",
         "port_range_min": 80,
-        "port_range_max": 80
+        "port_range_max": 80,
     }
     mock_hyperstack.post.assert_called_once_with("core/virtual-machines/vm-123/sg-rules", data=expected_payload)
     assert result == {"status": "success", "data": {}}
+
 
 def test_delete_sg_rules(mock_hyperstack):
     result = delete_sg_rules(mock_hyperstack, "vm-123", "rule-456")
     mock_hyperstack.delete.assert_called_once_with("core/virtual-machines/vm-123/sg-rules/rule-456")
     assert result == {"status": "success", "data": {}}
 
+
 def test_retrieve_vnc_path(mock_hyperstack):
     result = retrieve_vnc_path(mock_hyperstack, "vm-123")
     mock_hyperstack.get.assert_called_once_with("core/virtual-machines/vm-123/request-console")
     assert result == {"status": "success", "data": {}}
 
+
 def test_retrieve_vnc_url(mock_hyperstack):
     result = retrieve_vnc_url(mock_hyperstack, "vm-123", "job-789")
     mock_hyperstack.post.assert_called_once_with("core/virtual-machines/vm-123/console/job-789")
     assert result == {"status": "success", "data": {}}
+
 
 @patch('time.sleep')  # Mock sleep to speed up tests
 def test_execute_with_backoff_success(mock_sleep):
@@ -67,6 +80,7 @@ def test_execute_with_backoff_success(mock_sleep):
     assert mock_func.call_count == 1
     mock_sleep.assert_called_once_with(0)  # Initial delay
 
+
 @patch('time.sleep')  # Mock sleep to speed up tests
 def test_execute_with_backoff_failure(mock_sleep):
     mock_func = MagicMock()
@@ -77,6 +91,7 @@ def test_execute_with_backoff_failure(mock_sleep):
     assert result is None
     assert mock_func.call_count == 3
     assert mock_sleep.call_count == 4  # Initial delay + 3 attempts
+
 
 @patch('time.sleep')  # Mock sleep to speed up tests
 @patch('builtins.print')  # Mock print to capture output
@@ -92,6 +107,7 @@ def test_execute_with_backoff_exception(mock_print, mock_sleep):
     mock_print.assert_any_call("Attempt 2 encountered an error: Test error")
     mock_print.assert_called_with("All attempts failed.")
 
+
 @patch('time.sleep')  # Mock sleep to speed up tests
 def test_execute_with_backoff_increasing_delay(mock_sleep):
     mock_func = MagicMock()
@@ -105,6 +121,7 @@ def test_execute_with_backoff_increasing_delay(mock_sleep):
         call(4),  # Second retry (2 * 2)
         call(8),  # Third retry (4 * 2)
     ]
+
 
 @patch('time.sleep')  # Mock sleep to speed up tests
 @patch('builtins.print')  # Mock print to capture output

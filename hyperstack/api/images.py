@@ -1,5 +1,6 @@
 from .regions import Region
 
+
 def list_images(self, region=None):
     """
     Lists all available regions or filters by a specific region.
@@ -10,9 +11,12 @@ def list_images(self, region=None):
     params = {}
     if region:
         if not isinstance(region, Region):
-            raise ValueError(f"Invalid region specified. Use Region enum: {', '.join([r.value for r in Region])}")
+            raise ValueError(
+                f"Invalid region specified. Use Region enum: {', '.join([r.value for r in Region])}"
+            ) from None
         params['region'] = region.value
     return self.get("core/images", params=params)
+
 
 def get_image_enum(region_string):
     """
@@ -23,5 +27,5 @@ def get_image_enum(region_string):
     """
     try:
         return Region(region_string)
-    except ValueError:
-        raise ValueError(f"Invalid region string. Valid regions are: {', '.join([r.value for r in Region])}")
+    except ValueError as e:
+        raise ValueError(f"Invalid region string. Valid regions are: {', '.join([r.value for r in Region])}") from e

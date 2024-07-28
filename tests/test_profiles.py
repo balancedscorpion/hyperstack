@@ -1,7 +1,9 @@
+from unittest.mock import patch
+
 import pytest
-from unittest.mock import patch, MagicMock
-from hyperstack import Hyperstack
-from hyperstack.api.profiles import create_profile, list_profiles, retrieve_profile, delete_profile
+
+from hyperstack.api.profiles import create_profile, delete_profile, list_profiles, retrieve_profile
+
 
 @pytest.fixture
 def mock_hyperstack():
@@ -12,6 +14,7 @@ def mock_hyperstack():
         mock_instance.delete.return_value = {"status": "success", "data": {}}
         yield mock_instance
 
+
 def test_create_profile_success(mock_hyperstack):
     result = create_profile(
         mock_hyperstack,
@@ -20,9 +23,9 @@ def test_create_profile_success(mock_hyperstack):
         image_name="ubuntu-20.04",
         flavor_name="standard-1",
         key_name="test-key",
-        count=1
+        count=1,
     )
-    
+
     expected_payload = {
         "name": "test-profile",
         "data": {
@@ -34,12 +37,13 @@ def test_create_profile_success(mock_hyperstack):
             "assign_floating_ip": "false",
             "create_bootable_volume": "false",
             "user_data": "",
-            "callback_url": ""
-        }
+            "callback_url": "",
+        },
     }
-    
+
     mock_hyperstack.post.assert_called_once_with("core/profiles", json=expected_payload)
     assert result == {"status": "success", "data": {"id": "profile-123"}}
+
 
 def test_create_profile_with_description(mock_hyperstack):
     result = create_profile(
@@ -50,9 +54,9 @@ def test_create_profile_with_description(mock_hyperstack):
         flavor_name="standard-1",
         key_name="test-key",
         count=1,
-        description="Test profile description"
+        description="Test profile description",
     )
-    
+
     expected_payload = {
         "name": "test-profile",
         "description": "Test profile description",
@@ -65,12 +69,13 @@ def test_create_profile_with_description(mock_hyperstack):
             "assign_floating_ip": "false",
             "create_bootable_volume": "false",
             "user_data": "",
-            "callback_url": ""
-        }
+            "callback_url": "",
+        },
     }
-    
+
     mock_hyperstack.post.assert_called_once_with("core/profiles", json=expected_payload)
     assert result == {"status": "success", "data": {"id": "profile-123"}}
+
 
 def test_create_profile_name_too_long(mock_hyperstack):
     with pytest.raises(ValueError, match="Profile name must not exceed 50 characters."):
@@ -81,8 +86,9 @@ def test_create_profile_name_too_long(mock_hyperstack):
             image_name="ubuntu-20.04",
             flavor_name="standard-1",
             key_name="test-key",
-            count=1
+            count=1,
         )
+
 
 def test_create_profile_description_too_long(mock_hyperstack):
     with pytest.raises(ValueError, match="Profile description must not exceed 150 characters."):
@@ -94,8 +100,9 @@ def test_create_profile_description_too_long(mock_hyperstack):
             flavor_name="standard-1",
             key_name="test-key",
             count=1,
-            description="a" * 151
+            description="a" * 151,
         )
+
 
 def test_create_profile_invalid_count(mock_hyperstack):
     with pytest.raises(ValueError, match="'count' must be an integer."):
@@ -106,18 +113,21 @@ def test_create_profile_invalid_count(mock_hyperstack):
             image_name="ubuntu-20.04",
             flavor_name="standard-1",
             key_name="test-key",
-            count="1"  # String instead of integer
+            count="1",  # String instead of integer
         )
+
 
 def test_list_profiles(mock_hyperstack):
     result = list_profiles(mock_hyperstack)
     mock_hyperstack.get.assert_called_once_with("core/profiles")
     assert result == {"status": "success", "data": {}}
 
+
 def test_retrieve_profile(mock_hyperstack):
     result = retrieve_profile(mock_hyperstack, "profile-123")
     mock_hyperstack.get.assert_called_once_with("core/profiles/profile-123")
     assert result == {"status": "success", "data": {}}
+
 
 def test_delete_profile(mock_hyperstack):
     result = delete_profile(mock_hyperstack, "profile-123")

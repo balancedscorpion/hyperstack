@@ -1,6 +1,17 @@
-def create_profile(self, name, environment_name, image_name, flavor_name, key_name, count,
-                   assign_floating_ip=False, create_bootable_volume=False, user_data="",
-                   callback_url="", description=None):
+def create_profile(
+    self,
+    name,
+    environment_name,
+    image_name,
+    flavor_name,
+    key_name,
+    count,
+    assign_floating_ip=False,
+    create_bootable_volume=False,
+    user_data="",
+    callback_url="",
+    description=None,
+):
     """
     Creates a new profile with the given parameters.
 
@@ -19,7 +30,7 @@ def create_profile(self, name, environment_name, image_name, flavor_name, key_na
     """
     if len(name) > 50:
         raise ValueError("Profile name must not exceed 50 characters.")
-    
+
     if description and len(description) > 150:
         raise ValueError("Profile description must not exceed 150 characters.")
 
@@ -35,18 +46,16 @@ def create_profile(self, name, environment_name, image_name, flavor_name, key_na
         "assign_floating_ip": str(assign_floating_ip).lower(),
         "create_bootable_volume": str(create_bootable_volume).lower(),
         "user_data": user_data,
-        "callback_url": callback_url
+        "callback_url": callback_url,
     }
 
-    payload = {
-        "name": name,
-        "data": data
-    }
-    
+    payload = {"name": name, "data": data}
+
     if description:
         payload["description"] = description
 
     return self.post("core/profiles", json=payload)
+
 
 def list_profiles(self):
     """
@@ -56,6 +65,7 @@ def list_profiles(self):
     """
     return self.get("core/profiles")
 
+
 def retrieve_profile(self, profile_id):
     """
     Retrieves details of a specific profile.
@@ -64,6 +74,7 @@ def retrieve_profile(self, profile_id):
     :return: The response from the API call.
     """
     return self.get(f"core/profiles/{profile_id}")
+
 
 def delete_profile(self, profile_id):
     """

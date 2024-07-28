@@ -1,8 +1,10 @@
 from enum import Enum
 
+
 class Region(Enum):
     NORWAY_1 = "NORWAY-1"
     CANADA_1 = "CANADA-1"
+
 
 def list_regions(self, region=None):
     """
@@ -20,10 +22,13 @@ def list_regions(self, region=None):
     params = {}
     if region:
         if not isinstance(region, Region):
-            raise ValueError(f"Invalid region specified. Use Region enum: {', '.join([r.value for r in Region])}")
+            raise ValueError(
+                f"Invalid region specified. Use Region enum: {', '.join([r.value for r in Region])}"
+            ) from None
         params['region'] = region.value
-    
+
     return self.get("core/regions", params=params)
+
 
 def get_region_enum(region_string):
     """
@@ -34,5 +39,5 @@ def get_region_enum(region_string):
     """
     try:
         return Region(region_string)
-    except ValueError:
-        raise ValueError(f"Invalid region string. Valid regions are: {', '.join([r.value for r in Region])}")
+    except ValueError as e:
+        raise ValueError(f"Invalid region string. Valid regions are: {', '.join([r.value for r in Region])}") from e

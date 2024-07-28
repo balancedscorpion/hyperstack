@@ -1,12 +1,4 @@
-from . import environments
-from . import flavors
-from . import images
-from . import network
-from . import profiles
-from . import regions
-from . import stock
-from . import virtual_machines
-from . import volumes
+from . import environments, flavors, images, network, profiles, regions, stock, virtual_machines, volumes
 
 __all__ = [
     'environments',
@@ -17,5 +9,5 @@ __all__ = [
     'regions',
     'stock',
     'virtual_machines',
-    'volumes'
+    'volumes',
 ]

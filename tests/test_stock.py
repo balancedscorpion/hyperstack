@@ -1,7 +1,9 @@
+from unittest.mock import patch
+
 import pytest
-from unittest.mock import patch, MagicMock
-from hyperstack import Hyperstack
+
 from hyperstack.api.stock import retrieve_gpu_stock
+
 
 @pytest.fixture
 def mock_hyperstack():
@@ -9,6 +11,7 @@ def mock_hyperstack():
         mock_instance = MockHyperstack.return_value
         mock_instance.get.return_value = {"status": "success", "data": {"gpu_stock": []}}
         yield mock_instance
+
 
 def test_retrieve_gpu_stock(mock_hyperstack):
     result = retrieve_gpu_stock(mock_hyperstack)

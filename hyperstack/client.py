@@ -1,7 +1,10 @@
-import os
-import requests
-from .api import profiles, environments, flavors, images, network, regions, stock, virtual_machines, volumes
 import json
+import os
+
+import requests
+
+from .api import environments, flavors, images, network, profiles, regions, stock, virtual_machines, volumes
+
 
 class Hyperstack:
     def __init__(self, api_key=None):
@@ -9,10 +12,7 @@ class Hyperstack:
         if not self.api_key:
             raise EnvironmentError("HYPERSTACK_API_KEY environment variable not set. Please set it to continue.")
         self.base_url = "https://infrahub-api.nexgencloud.com/v1/"
-        self.headers = {
-            "Content-Type": "application/json",
-            "api_key": self.api_key
-        }
+        self.headers = {"Content-Type": "application/json", "api_key": self.api_key}
         self.valid_regions = ["NORWAY-1", "CANADA-1"]
         self.environment = None
 
@@ -33,7 +33,6 @@ class Hyperstack:
     def post(self, endpoint, data=None, **kwargs):
         """Send a POST request."""
         return json.loads(self._request("POST", endpoint, json=data, **kwargs).content)
-
 
     def put(self, endpoint, data=None, **kwargs):
         """Send a PUT request."""
