@@ -1,4 +1,11 @@
 # Hyperstack Python Client
+![Tests](https://img.shields.io/github/actions/workflow/status/balancedscorpion/hyperstack/tests.yml?label=tests)
+![Coverage](https://img.shields.io/codecov/c/github/balancedscorpion/hyperstack)
+![PyPI](https://img.shields.io/pypi/v/hyperstack)
+![Python Versions](https://img.shields.io/pypi/pyversions/hyperstack)
+![License](https://img.shields.io/github/license/balancedscorpion/hyperstack)
+![GitHub Stars](https://img.shields.io/github/stars/balancedscorpion/hyperstack)
+![PyPI Downloads](https://img.shields.io/pypi/dm/hyperstack)
 
 This is a Python client for interacting with the Hyperstack API
 
@@ -13,7 +20,7 @@ pip install hyperstack
 First ensure you have your API key set in an environment variable:
 
 ```bash
-HYPERSTACK_API_KEY=<your API Key>
+export HYPERSTACK_API_KEY=<your API Key>
 ```
 
 ```python
