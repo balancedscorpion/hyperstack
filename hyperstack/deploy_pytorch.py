@@ -70,6 +70,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# deploy_pytorch(flavor_name='n2-RTX-A5000x1')
-# deploy_pytorch(flavor_name='n3-L40x1',environment='evelopment-CA' key_name='evelopment-key-ca')
