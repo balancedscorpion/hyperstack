@@ -52,9 +52,14 @@ jobs:
       with:
         file: ./coverage.xml
 
-    - name: Run mypy
-      run: poetry run mypy hyperstack/ tests/
+    - name: mypy
+      run: poetry run mypy .
 
-    - name: Run pre-commit hooks
-      run: |
-        poetry run pre-commit run --all-files
+    - name: Black
+      run: poetry run black .
+
+    - name: Ruff
+      run: poetry run ruff check .
+
+    - name: Pytest
+      run: poetry run pytest
