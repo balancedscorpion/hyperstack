@@ -3,8 +3,7 @@
 ![Coverage](https://img.shields.io/codecov/c/github/balancedscorpion/hyperstack)
 ![PyPI](https://img.shields.io/pypi/v/hyperstack)
 ![Python Versions](https://img.shields.io/pypi/pyversions/hyperstack)
-![License](https://img.shields.io/github/license/balancedscorpion/hyperstack)
-![GitHub Stars](https://img.shields.io/github/stars/balancedscorpion/hyperstack)
+![License](https://img.shields.io/github/License/balancedscorpion/hyperstack)
 ![PyPI Downloads](https://img.shields.io/pypi/dm/hyperstack)
 
 This is a Python client for interacting with the Hyperstack API
