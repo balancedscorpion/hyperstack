@@ -53,7 +53,7 @@ jobs:
         file: ./coverage.xml
 
     - name: Run mypy
-      run: poetry run mypy
+      run: poetry run mypy hyperstack/ tests/
 
     - name: Run pre-commit hooks
       run: |
