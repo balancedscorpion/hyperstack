@@ -1,15 +1,15 @@
-from .. import hyperstack
+import time
 
-def attach_public_ip(vm_id):
-    hyperstack._check_environment_set()
-    return hyperstack._request("POST", f"core/virtual-machines/{vm_id}/attach-floatingip")
+def attach_public_ip(self, vm_id):
+    self._check_environment_set()
+    return self._request("POST", f"core/virtual-machines/{vm_id}/attach-floatingip")
 
-def detach_public_ip(vm_id):
-    hyperstack._check_environment_set()
-    return hyperstack._request("POST", f"core/virtual-machines/{vm_id}/detach-floatingip")
+def detach_public_ip(self, vm_id):
+    self._check_environment_set()
+    return self._request("POST", f"core/virtual-machines/{vm_id}/detach-floatingip")
 
-def set_sg_rules(vm_id, remote_ip_prefix="0.0.0.0/0", direction="ingress", ethertype="IPv4", protocol="tcp", port_range_min=None, port_range_max=None):
-    hyperstack._check_environment_set()
+def set_sg_rules(self, vm_id, remote_ip_prefix="0.0.0.0/0", direction="ingress", ethertype="IPv4", protocol="tcp", port_range_min=None, port_range_max=None):
+    self._check_environment_set()
     
     payload = {
         "remote_ip_prefix": remote_ip_prefix,
@@ -23,30 +23,28 @@ def set_sg_rules(vm_id, remote_ip_prefix="0.0.0.0/0", direction="ingress", ether
     if port_range_max is not None:
         payload["port_range_max"] = port_range_max
     
-    return hyperstack._request("POST", f"core/virtual-machines/{vm_id}/sg-rules", json=payload)
+    return self._request("POST", f"core/virtual-machines/{vm_id}/sg-rules", json=payload)
 
-def delete_sg_rules(vm_id, sg_rule_id):
-    hyperstack._check_environment_set()
-    
-    return hyperstack._request("DELETE", f"core/virtual-machines/{vm_id}/sg-rules/{sg_rule_id}")
+def delete_sg_rules(self, vm_id, sg_rule_id):
+    self._check_environment_set()
+    return self._request("DELETE", f"core/virtual-machines/{vm_id}/sg-rules/{sg_rule_id}")
 
-def retrieve_vnc_path(vm_id):
-    hyperstack._check_environment_set()
-    return hyperstack._request("GET", f"core/virtual-machines/{vm_id}/request-console")
+def retrieve_vnc_path(self, vm_id):
+    self._check_environment_set()
+    return self._request("GET", f"core/virtual-machines/{vm_id}/request-console")
 
-def retrieve_vnc_url(vm_id, job_id):
+def retrieve_vnc_url(self, vm_id, job_id):
     """
-    Deletes a specific environment.
+    Retrieves the VNC URL for a specific virtual machine.
 
     :param vm_id: The ID of the virtual machine for which to retrieve the VNC console.
     :param job_id: The ID of the job corresponding to the VNC console.
     :return: The response from the API call.
     """
-    
-    hyperstack._check_environment_set()
-    return hyperstack._request("POST", f"core/virtual-machines/{vm_id}/console/{job_id}")
+    self._check_environment_set()
+    return self._request("POST", f"core/virtual-machines/{vm_id}/console/{job_id}")
 
-def _execute_with_backoff(func, max_attempts=4, initial_delay=30, delay=10, backoff_factor=1.5, **kwargs):
+def _execute_with_backoff(self, func, max_attempts=4, initial_delay=30, delay=10, backoff_factor=1.5, **kwargs):
     """
     Executes a function with a back-off strategy.
 
@@ -67,7 +65,6 @@ def _execute_with_backoff(func, max_attempts=4, initial_delay=30, delay=10, back
             if result.status_code == 200:
                 return result
             else:
-                #print(f"Attempt {attempts + 1} failed: {result.status_code} - {result.text}")
                 pass
         except Exception as e:
             print(f"Attempt {attempts + 1} encountered an error: {e}")

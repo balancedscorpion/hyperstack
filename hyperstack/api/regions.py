@@ -1,11 +1,10 @@
-from .. import hyperstack
 from enum import Enum
 
 class Region(Enum):
     NORWAY_1 = "NORWAY-1"
     CANADA_1 = "CANADA-1"
 
-def list_regions(region=None):
+def list_regions(self, region=None):
     """
     Lists all available regions or filters by a specific region.
 
@@ -24,7 +23,7 @@ def list_regions(region=None):
             raise ValueError(f"Invalid region specified. Use Region enum: {', '.join([r.value for r in Region])}")
         params['region'] = region.value
     
-    return hyperstack._request("GET", "core/regions", params=params)
+    return self._request("GET", "core/regions", params=params)
 
 def get_region_enum(region_string):
     """

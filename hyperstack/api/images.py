@@ -1,26 +1,18 @@
-from .. import hyperstack
 from .regions import Region
 
-def list_images(region=None):
+def list_images(self, region=None):
     """
     Lists all available regions or filters by a specific region.
 
     :param region: Optional. The region to filter (enum: Region.NORWAY_1 or Region.CANADA_1).
     :return: The response from the API call.
-
-    Query string parameters:
-    region (enum): Optional. Include a region name in the query string of the request
-                   to return only the information for the specified region.
-                   If no region is included, information for all regions will be retrieved.
-    Possible enum values: NORWAY-1 or CANADA-1.
     """
     params = {}
     if region:
         if not isinstance(region, Region):
             raise ValueError(f"Invalid region specified. Use Region enum: {', '.join([r.value for r in Region])}")
         params['region'] = region.value
-    
-    return hyperstack._request("GET", "core/images", params=params)
+    return self._request("GET", "core/images", params=params)
 
 def get_image_enum(region_string):
     """

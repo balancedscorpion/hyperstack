@@ -1,7 +1,6 @@
-from .. import hyperstack
-from .regions import Region, get_region_enum
+from .regions import get_region_enum
 
-def create_environment(name, region_str):
+def create_environment(self, name, region_str):
     """
     Creates a new environment with the given name and region.
 
@@ -14,57 +13,58 @@ def create_environment(name, region_str):
     except ValueError as e:
         raise ValueError(f"Invalid region specified: {region_str}. {str(e)}")
     
-    payload={
+    payload = {
         "name": name,
         "region": region.value
     }
+    return self._request("POST", "core/environments", json=payload)
 
-    return hyperstack._request("POST","core/environments",json=payload)
-
-def list_environments():
+def list_environments(self):
     """
     Lists all environments.
 
     :return: The response from the API call.
     """
-    return hyperstack._request("GET", "core/environments")
+    return self._request("GET", "core/environments")
 
-def get_environment(environment_id):
+def get_environment(self, environment_id):
     """
     Retrieves details of a specific environment.
 
     :param environment_id: The ID of the environment to retrieve.
     :return: The response from the API call.
     """
-    return hyperstack._request("GET", f"core/environments/{environment_id}")
+    return self._request("GET", f"core/environments/{environment_id}")
 
-def set_environment(environment_id):
+def set_environment(self, environment_id):
     """
-    Retrieves details of a specific environment.
+    Sets the current environment.
 
-    :param environment_id: The ID of the environment to retrieve.
+    :param environment_id: The ID of the environment to set.
     :return: The response from the API call.
     """
-    return hyperstack._request("GET", f"core/environments/{environment_id}")
+    response = self._request("GET", f"core/environments/{environment_id}")
+    if response.status_code == 200:
+        self.environment = environment_id
+        print(f"Environment set to: {environment_id}")
+    return response
 
-def delete_environment(environment_id):
+def delete_environment(self, environment_id):
     """
     Deletes a specific environment.
 
     :param environment_id: The ID of the environment to delete.
     :return: The response from the API call.
     """
-    return hyperstack._request("DELETE", f"core/environments/{environment_id}")
+    return self._request("DELETE", f"core/environments/{environment_id}")
 
-def update_environment(environment_id, name):
+def update_environment(self, environment_id, name):
     """
     Updates an existing environment.
 
     :param environment_id: The ID of the environment to update.
-    :param name: (Optional) The new name for the environment.
+    :param name: The new name for the environment.
+    :return: The response from the API call.
     """
-    payload = {}
-    payload["name"] = name
-
-    return hyperstack._request("PUT", f"core/environments/{environment_id}", json=payload)
-
+    payload = {"name": name}
+    return self._request("PUT", f"core/environments/{environment_id}", json=payload)

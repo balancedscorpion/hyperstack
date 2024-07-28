@@ -1,9 +1,7 @@
-from .. import hyperstack
-
-def retrieve_gpu_stock():
+def retrieve_gpu_stock(self):
     """
     Retrieves the current GPU stock information.
 
     :return: The response from the API call.
     """
-    return hyperstack._request("GET", "core/stocks")
+    return self._request("GET", "core/stocks")

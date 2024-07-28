@@ -1,6 +1,4 @@
-from .. import hyperstack
-
-def create_profile(name, environment_name, image_name, flavor_name, key_name, count,
+def create_profile(self, name, environment_name, image_name, flavor_name, key_name, count,
                    assign_floating_ip=False, create_bootable_volume=False, user_data="",
                    callback_url="", description=None):
     """
@@ -48,30 +46,30 @@ def create_profile(name, environment_name, image_name, flavor_name, key_name, co
     if description:
         payload["description"] = description
 
-    return hyperstack._request("POST", "core/profiles", json=payload)
+    return self._request("POST", "core/profiles", json=payload)
 
-def list_profiles():
+def list_profiles(self):
     """
     Lists all profiles.
 
     :return: The response from the API call.
     """
-    return hyperstack._request("GET", "core/profiles")
+    return self._request("GET", "core/profiles")
 
-def retrieve_profile(profile_id):
+def retrieve_profile(self, profile_id):
     """
     Retrieves details of a specific profile.
 
     :param profile_id: The unique identifier of the profile.
     :return: The response from the API call.
     """
-    return hyperstack._request("GET", f"core/profiles/{profile_id}")
+    return self._request("GET", f"core/profiles/{profile_id}")
 
-def delete_profile(profile_id):
+def delete_profile(self, profile_id):
     """
     Deletes a specific profile.
 
     :param profile_id: The unique identifier of the profile to be deleted.
     :return: The response from the API call.
     """
-    return hyperstack._request("DELETE", f"core/profiles/{profile_id}")
+    return self._request("DELETE", f"core/profiles/{profile_id}")
