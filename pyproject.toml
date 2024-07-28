@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "hyperstack"
-version = "0.2.2"
+version = "0.2.3"
 description = "A Python wrapper for the Hyperstack API"
 authors = ["Jamie Martin"]
 license = "Apache License 2.0"
 readme = "README.md"
 
-homepage = "https://github.com/balancedscorpion/hyperstack-python"
-repository = "https://github.com/balancedscorpion/hyperstack-python"
+homepage = "https://github.com/balancedscorpion/hyperstack"
+repository = "https://github.com/balancedscorpion/hyperstack"
 keywords = ["api", "wrapper", "hyperstack", "GPU"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -31,6 +31,7 @@ requests = "^2.32.3"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.2"
 pytest-mock = "^3.10.0"
+pytest-cov = "^5.0.0"
 
 [build-system]
 requires = ["poetry-core"]

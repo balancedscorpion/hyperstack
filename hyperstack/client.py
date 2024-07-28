@@ -37,7 +37,7 @@ class Hyperstack:
 
     def put(self, endpoint, data=None, **kwargs):
         """Send a PUT request."""
-        return json.loads(self._request("PUT", endpoint, **kwargs).content)
+        return json.loads(self._request("PUT", endpoint, json=data, **kwargs).content)
 
     def delete(self, endpoint, **kwargs):
         """Send a DELETE request."""

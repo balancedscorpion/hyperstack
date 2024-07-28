@@ -56,29 +56,64 @@ def test_retrieve_vnc_url(mock_hyperstack):
     mock_hyperstack.post.assert_called_once_with("core/virtual-machines/vm-123/console/job-789")
     assert result == {"status": "success", "data": {}}
 
-@patch('time.sleep')
-def test_execute_with_backoff_success(mock_sleep, mock_hyperstack):
+@patch('time.sleep')  # Mock sleep to speed up tests
+def test_execute_with_backoff_success(mock_sleep):
     mock_func = MagicMock()
     mock_func.return_value.status_code = 200
-    
-    result = _execute_with_backoff(mock_hyperstack, mock_func, initial_delay=0, delay=0)
-    
-    assert mock_func.call_count == 1
+
+    result = _execute_with_backoff(MagicMock(), mock_func, initial_delay=0, delay=0)
+
     assert result.status_code == 200
+    assert mock_func.call_count == 1
     mock_sleep.assert_called_once_with(0)  # Initial delay
 
-@patch('time.sleep')
-def test_execute_with_backoff_failure(mock_sleep, mock_hyperstack):
+@patch('time.sleep')  # Mock sleep to speed up tests
+def test_execute_with_backoff_failure(mock_sleep):
     mock_func = MagicMock()
     mock_func.return_value.status_code = 500
-    
-    result = _execute_with_backoff(mock_hyperstack, mock_func, max_attempts=3, initial_delay=0, delay=0)
-    
-    assert mock_func.call_count == 3
-    assert result is None
-    assert mock_sleep.call_count == 4  # Initial delay + 3 retries
 
-def test_environment_not_set(mock_hyperstack):
-    mock_hyperstack._check_environment_set.side_effect = EnvironmentError("Environment is not set")
-    with pytest.raises(EnvironmentError, match="Environment is not set"):
-        attach_public_ip(mock_hyperstack, "vm-123")
+    result = _execute_with_backoff(MagicMock(), mock_func, max_attempts=3, initial_delay=0, delay=0)
+
+    assert result is None
+    assert mock_func.call_count == 3
+    assert mock_sleep.call_count == 4  # Initial delay + 3 attempts
+
+@patch('time.sleep')  # Mock sleep to speed up tests
+@patch('builtins.print')  # Mock print to capture output
+def test_execute_with_backoff_exception(mock_print, mock_sleep):
+    mock_func = MagicMock(side_effect=Exception("Test error"))
+
+    result = _execute_with_backoff(MagicMock(), mock_func, max_attempts=2, initial_delay=0, delay=0)
+
+    assert result is None
+    assert mock_func.call_count == 2
+    assert mock_sleep.call_count == 3  # Initial delay + 2 attempts
+    mock_print.assert_any_call("Attempt 1 encountered an error: Test error")
+    mock_print.assert_any_call("Attempt 2 encountered an error: Test error")
+    mock_print.assert_called_with("All attempts failed.")
+
+@patch('time.sleep')  # Mock sleep to speed up tests
+def test_execute_with_backoff_increasing_delay(mock_sleep):
+    mock_func = MagicMock()
+    mock_func.return_value.status_code = 500
+
+    _execute_with_backoff(MagicMock(), mock_func, max_attempts=3, initial_delay=1, delay=2, backoff_factor=2)
+
+    assert mock_sleep.call_args_list == [
+        call(1),  # Initial delay
+        call(2),  # First retry
+        call(4),  # Second retry (2 * 2)
+        call(8),  # Third retry (4 * 2)
+    ]
+
+@patch('time.sleep')  # Mock sleep to speed up tests
+@patch('builtins.print')  # Mock print to capture output
+def test_execute_with_backoff_all_attempts_failed(mock_print, mock_sleep):
+    mock_func = MagicMock()
+    mock_func.return_value.status_code = 500
+
+    result = _execute_with_backoff(MagicMock(), mock_func, max_attempts=3, initial_delay=1, delay=2, backoff_factor=2)
+
+    assert result is None
+    assert mock_func.call_count == 3
+    mock_print.assert_called_with("All attempts failed.")
