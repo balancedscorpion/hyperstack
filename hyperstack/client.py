@@ -4,8 +4,8 @@ from .api import profiles, environments, flavors, images, network, regions, stoc
 import json
 
 class Hyperstack:
-    def __init__(self):
-        self.api_key = os.environ.get("HYPERSTACK_API_KEY")
+    def __init__(self, api_key=None):
+        self.api_key = api_key or os.environ.get("HYPERSTACK_API_KEY")
         if not self.api_key:
             raise EnvironmentError("HYPERSTACK_API_KEY environment variable not set. Please set it to continue.")
         self.base_url = "https://infrahub-api.nexgencloud.com/v1/"
