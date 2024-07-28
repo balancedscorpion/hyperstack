@@ -12,7 +12,7 @@ def list_images(self, region=None):
         if not isinstance(region, Region):
             raise ValueError(f"Invalid region specified. Use Region enum: {', '.join([r.value for r in Region])}")
         params['region'] = region.value
-    return self._request("GET", "core/images", params=params)
+    return self.get("core/images", params=params)
 
 def get_image_enum(region_string):
     """

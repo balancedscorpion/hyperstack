@@ -4,4 +4,4 @@ def retrieve_gpu_stock(self):
 
     :return: The response from the API call.
     """
-    return self._request("GET", "core/stocks")
+    return self.get("core/stocks")

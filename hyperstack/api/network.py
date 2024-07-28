@@ -1,12 +1,13 @@
 import time
+import json
 
 def attach_public_ip(self, vm_id):
     self._check_environment_set()
-    return self._request("POST", f"core/virtual-machines/{vm_id}/attach-floatingip")
+    return self.post(f"core/virtual-machines/{vm_id}/attach-floatingip")
 
 def detach_public_ip(self, vm_id):
     self._check_environment_set()
-    return self._request("POST", f"core/virtual-machines/{vm_id}/detach-floatingip")
+    return self.post(f"core/virtual-machines/{vm_id}/detach-floatingip")
 
 def set_sg_rules(self, vm_id, remote_ip_prefix="0.0.0.0/0", direction="ingress", ethertype="IPv4", protocol="tcp", port_range_min=None, port_range_max=None):
     self._check_environment_set()
@@ -23,15 +24,15 @@ def set_sg_rules(self, vm_id, remote_ip_prefix="0.0.0.0/0", direction="ingress",
     if port_range_max is not None:
         payload["port_range_max"] = port_range_max
     
-    return self._request("POST", f"core/virtual-machines/{vm_id}/sg-rules", json=payload)
+    return self.post(f"core/virtual-machines/{vm_id}/sg-rules", data=payload)
 
 def delete_sg_rules(self, vm_id, sg_rule_id):
     self._check_environment_set()
-    return self._request("DELETE", f"core/virtual-machines/{vm_id}/sg-rules/{sg_rule_id}")
+    return self.delete(f"core/virtual-machines/{vm_id}/sg-rules/{sg_rule_id}")
 
 def retrieve_vnc_path(self, vm_id):
     self._check_environment_set()
-    return self._request("GET", f"core/virtual-machines/{vm_id}/request-console")
+    return (self.get(f"core/virtual-machines/{vm_id}/request-console"))
 
 def retrieve_vnc_url(self, vm_id, job_id):
     """
@@ -42,7 +43,7 @@ def retrieve_vnc_url(self, vm_id, job_id):
     :return: The response from the API call.
     """
     self._check_environment_set()
-    return self._request("POST", f"core/virtual-machines/{vm_id}/console/{job_id}")
+    return self.post(f"core/virtual-machines/{vm_id}/console/{job_id}")
 
 def _execute_with_backoff(self, func, max_attempts=4, initial_delay=30, delay=10, backoff_factor=1.5, **kwargs):
     """

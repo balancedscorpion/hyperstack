@@ -23,7 +23,7 @@ def list_regions(self, region=None):
             raise ValueError(f"Invalid region specified. Use Region enum: {', '.join([r.value for r in Region])}")
         params['region'] = region.value
     
-    return self._request("GET", "core/regions", params=params)
+    return self.get("core/regions", params=params)
 
 def get_region_enum(region_string):
     """

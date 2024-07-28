@@ -17,7 +17,7 @@ def create_environment(self, name, region_str):
         "name": name,
         "region": region.value
     }
-    return self._request("POST", "core/environments", json=payload)
+    return self.post("POST", "core/environments", data=payload)
 
 def list_environments(self):
     """
@@ -25,7 +25,7 @@ def list_environments(self):
 
     :return: The response from the API call.
     """
-    return self._request("GET", "core/environments")
+    return self.get("core/environments")
 
 def get_environment(self, environment_id):
     """
@@ -34,20 +34,17 @@ def get_environment(self, environment_id):
     :param environment_id: The ID of the environment to retrieve.
     :return: The response from the API call.
     """
-    return self._request("GET", f"core/environments/{environment_id}")
+    return self.get(f"core/environments/{environment_id}")
 
-def set_environment(self, environment_id):
+def set_environment(self, environment_name):
     """
     Sets the current environment.
 
     :param environment_id: The ID of the environment to set.
     :return: The response from the API call.
     """
-    response = self._request("GET", f"core/environments/{environment_id}")
-    if response.status_code == 200:
-        self.environment = environment_id
-        print(f"Environment set to: {environment_id}")
-    return response
+    self.environment = environment_name
+    print(f"Environment set to: {environment_name}")
 
 def delete_environment(self, environment_id):
     """
@@ -56,7 +53,7 @@ def delete_environment(self, environment_id):
     :param environment_id: The ID of the environment to delete.
     :return: The response from the API call.
     """
-    return self._request("DELETE", f"core/environments/{environment_id}")
+    return self.delete(f"core/environments/{environment_id}")
 
 def update_environment(self, environment_id, name):
     """
@@ -67,4 +64,4 @@ def update_environment(self, environment_id, name):
     :return: The response from the API call.
     """
     payload = {"name": name}
-    return self._request("PUT", f"core/environments/{environment_id}", json=payload)
+    return self.put(f"core/environments/{environment_id}", data=payload)

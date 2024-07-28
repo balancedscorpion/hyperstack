@@ -26,7 +26,7 @@ def create_volume(self, name, volume_type, size=50, image_id=None, description=N
     if callback_url is not None:
         payload["callback_url"] = callback_url
     
-    return self._request("POST", "core/volumes", json=payload)
+    return self.post("core/volumes", data=payload)
 
 def list_volumes(self):
     """
@@ -35,7 +35,7 @@ def list_volumes(self):
     :return: The response from the API call, containing the list of volumes.
     """
     self._check_environment_set()
-    return self._request("GET", "core/volumes")
+    return self.get("core/volumes")
 
 def list_volume_types(self):
     """
@@ -43,7 +43,7 @@ def list_volume_types(self):
 
     :return: The response from the API call, containing the list of volume types.
     """
-    return self._request("GET", "core/volume-types")
+    return self.get("core/volume-types")
 
 def get_volume(self, volume_id):
     """
@@ -53,7 +53,7 @@ def get_volume(self, volume_id):
     :return: The response from the API call, containing the volume details.
     """
     self._check_environment_set()
-    return self._request("GET", f"core/volumes/{volume_id}")
+    return self.get(f"core/volumes/{volume_id}")
 
 def delete_volume(self, volume_id):
     """
@@ -63,4 +63,4 @@ def delete_volume(self, volume_id):
     :return: The response from the API call.
     """
     self._check_environment_set()
-    return self._request("DELETE", f"core/volumes/{volume_id}")
+    return self.delete(f"core/volumes/{volume_id}")

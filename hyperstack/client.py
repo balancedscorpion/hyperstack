@@ -1,6 +1,7 @@
 import os
 import requests
 from .api import profiles, environments, flavors, images, network, regions, stock, virtual_machines, volumes
+import json
 
 class Hyperstack:
     def __init__(self):
@@ -18,13 +19,29 @@ class Hyperstack:
     def _check_environment_set(self):
         if self.environment is None:
             raise EnvironmentError("Environment is not set. Please set the environment using set_environment().")
-        print(f"Current environment: {self.environment}")
 
     def _request(self, method, endpoint, **kwargs):
         url = f"{self.base_url}{endpoint}"
         response = requests.request(method, url, headers=self.headers, **kwargs)
         response.raise_for_status()
         return response
+
+    def get(self, endpoint, **kwargs):
+        """Send a GET request."""
+        return json.loads(self._request("GET", endpoint, **kwargs).content)
+
+    def post(self, endpoint, data=None, **kwargs):
+        """Send a POST request."""
+        return json.loads(self._request("POST", endpoint, json=data, **kwargs).content)
+
+
+    def put(self, endpoint, data=None, **kwargs):
+        """Send a PUT request."""
+        return json.loads(self._request("PUT", endpoint, **kwargs).content)
+
+    def delete(self, endpoint, **kwargs):
+        """Send a DELETE request."""
+        return json.loads(self._request("DELETE", endpoint, **kwargs).content)
 
     # Forward methods from profiles module
     create_profile = profiles.create_profile

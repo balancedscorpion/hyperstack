@@ -1,4 +1,5 @@
 from .regions import Region
+import json
 
 def list_flavors(self, region=None):
     """
@@ -12,7 +13,7 @@ def list_flavors(self, region=None):
         if not isinstance(region, Region):
             raise ValueError(f"Invalid region specified. Use Region enum: {', '.join([r.value for r in Region])}")
         params['region'] = region.value
-    return self._request("GET", "core/flavors", params=params)
+    return self.get("core/flavors", params=params)
 
 def get_flavor_enum(region_string):
     """

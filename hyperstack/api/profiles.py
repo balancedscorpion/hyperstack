@@ -46,7 +46,7 @@ def create_profile(self, name, environment_name, image_name, flavor_name, key_na
     if description:
         payload["description"] = description
 
-    return self._request("POST", "core/profiles", json=payload)
+    return self.post("core/profiles", json=payload)
 
 def list_profiles(self):
     """
@@ -54,7 +54,7 @@ def list_profiles(self):
 
     :return: The response from the API call.
     """
-    return self._request("GET", "core/profiles")
+    return self.get("core/profiles")
 
 def retrieve_profile(self, profile_id):
     """
@@ -63,7 +63,7 @@ def retrieve_profile(self, profile_id):
     :param profile_id: The unique identifier of the profile.
     :return: The response from the API call.
     """
-    return self._request("GET", f"core/profiles/{profile_id}")
+    return self.get(f"core/profiles/{profile_id}")
 
 def delete_profile(self, profile_id):
     """
@@ -72,4 +72,4 @@ def delete_profile(self, profile_id):
     :param profile_id: The unique identifier of the profile to be deleted.
     :return: The response from the API call.
     """
-    return self._request("DELETE", f"core/profiles/{profile_id}")
+    return self.delete(f"core/profiles/{profile_id}")
