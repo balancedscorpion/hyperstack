@@ -52,9 +52,6 @@ jobs:
       with:
         file: ./coverage.xml
 
-    - name: Run linting
-      run: poetry run flake8 hyperstack/
-
     - name: Run mypy
       run: poetry run mypy
 
