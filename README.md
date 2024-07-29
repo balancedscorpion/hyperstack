@@ -66,3 +66,16 @@ The same command as above, but change ollama to pytorch
 ```bash
 python3 hyperstack/deploy.py pytorch --name ollama-server --flavor_name n2-RTX-A5000x1 --key_name your-key --environment your-environment
 ```
+
+
+#### Deploy from Python
+
+```python3
+from hyperstack.deploy import deploy
+deploy(deployment_type="pytorch", name="pytorch-vm", environment="your-environment", flavor_name="n2-RTX-A5000x1", key_name="your-key")
+```
+
+```python3
+from hyperstack.deploy import deploy
+deploy(deployment_type="ollama", name="ollama-vm", environment="your-environment", flavor_name="n2-RTX-A5000x1", key_name="your-key")
+```
