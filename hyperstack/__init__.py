@@ -57,6 +57,7 @@ delete_virtual_machine = _hyperstack.delete_virtual_machine
 resize_virtual_machine = _hyperstack.resize_virtual_machine
 update_virtual_machine_labels = _hyperstack.update_virtual_machine_labels
 get_floating_ip = _hyperstack.get_floating_ip
+wait_for_vm_active = _hyperstack.wait_for_vm_active
 
 # Expose volume methods
 create_volume = _hyperstack.create_volume

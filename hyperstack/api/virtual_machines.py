@@ -1,3 +1,6 @@
+import time
+
+
 def create_vm(
     self,
     name,
@@ -81,3 +84,26 @@ def update_virtual_machine_labels(self, vm_id, labels: list):
 def get_floating_ip(self, vm_id):
     response = self.retrieve_vm_details(vm_id)
     return response['instance']['floating_ip']
+
+
+def wait_for_vm_active(self, vm_id, max_attempts=4, initial_delay=20, delay=10, backoff_factor=1.5):
+    current_delay = initial_delay
+    time.sleep(current_delay)
+    for attempt in range(max_attempts):
+        vm_details = self.retrieve_vm_details(vm_id)
+        status = vm_details['instance']['status']
+
+        if status == 'ACTIVE':
+            return True
+        elif status == 'ERROR':
+            raise Exception(f"VM {vm_id} entered ERROR state")
+
+        print(
+            f"Attempt {attempt + 1}/{max_attempts}: VM {vm_id} status is {status}. Waiting for {current_delay} seconds."
+        )
+        time.sleep(current_delay)
+
+        # Increase the delay for the next iteration
+        current_delay = delay + (delay * backoff_factor * attempt)
+
+    raise TimeoutError(f"VM {vm_id} did not become active within the specified time")

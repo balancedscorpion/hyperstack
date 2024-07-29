@@ -75,7 +75,6 @@ class Hyperstack:
     delete_sg_rules = network.delete_sg_rules
     retrieve_vnc_path = network.retrieve_vnc_path
     retrieve_vnc_url = network.retrieve_vnc_url
-    _execute_with_backoff = network._execute_with_backoff
 
     # Forward methods from stock module
     retrieve_gpu_stock = stock.retrieve_gpu_stock

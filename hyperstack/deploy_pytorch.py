@@ -1,30 +1,6 @@
 import argparse
-import time
 
 import hyperstack
-
-
-def wait_for_vm_active(vm_id, max_attempts=4, initial_delay=20, delay=10, backoff_factor=1.5):
-    current_delay = initial_delay
-    time.sleep(current_delay)
-    for attempt in range(max_attempts):
-        vm_details = hyperstack.retrieve_vm_details(vm_id)
-        status = vm_details['instance']['status']
-
-        if status == 'ACTIVE':
-            return True
-        elif status == 'ERROR':
-            raise Exception(f"VM {vm_id} entered ERROR state")
-
-        print(
-            f"Attempt {attempt + 1}/{max_attempts}: VM {vm_id} status is {status}. Waiting for {current_delay} seconds."
-        )
-        time.sleep(current_delay)
-
-        # Increase the delay for the next iteration
-        current_delay = delay + (delay * backoff_factor * attempt)
-
-    raise TimeoutError(f"VM {vm_id} did not become active within the specified time")
 
 
 def create_pytorch_vm(name, flavor_name, environment, key_name, image_name="Ubuntu Server 22.04 LTS R535 CUDA 12.2"):
@@ -41,7 +17,7 @@ def create_pytorch_vm(name, flavor_name, environment, key_name, image_name="Ubun
 
     vm_id = response['instances'][0]['id']
     print(f"Booting {vm_id}")
-    wait_for_vm_active(vm_id, max_attempts=4, initial_delay=30, delay=10, backoff_factor=1.5)
+    hyperstack.wait_for_vm_active(vm_id, max_attempts=4, initial_delay=30, delay=10, backoff_factor=1.5)
     hyperstack.set_sg_rules(vm_id=vm_id, port_range_min=22, port_range_max=22)
     hyperstack.set_sg_rules(vm_id=vm_id, protocol="icmp")
     print(f"Machine {vm_id} Ready")
