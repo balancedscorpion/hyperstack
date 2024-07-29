@@ -21,7 +21,9 @@ def create_pytorch_vm(name, flavor_name, environment, key_name, image_name="Ubun
     hyperstack.set_sg_rules(vm_id=vm_id, port_range_min=22, port_range_max=22)
     hyperstack.set_sg_rules(vm_id=vm_id, protocol="icmp")
     print(f"Machine {vm_id} Ready")
-    print(hyperstack.get_floating_ip(vm_id))
+    floating_ip = hyperstack.get_floating_ip(vm_id)
+    print(f"Public IP: {floating_ip}")
+    return vm_id, floating_ip
 
 
 def create_ollama_vm(name, flavor_name, environment, key_name, image_name="Ubuntu Server 22.04 LTS R535 CUDA 12.2"):
@@ -45,8 +47,21 @@ def create_ollama_vm(name, flavor_name, environment, key_name, image_name="Ubunt
     hyperstack.set_sg_rules(vm_id=vm_id, protocol="icmp")
 
     print(f"Machine {vm_id} Ready")
-    print(hyperstack.get_floating_ip(vm_id))
+    floating_ip = hyperstack.get_floating_ip(vm_id)
+    print(f"Public IP: {floating_ip}")
     print('DONE')
+    return vm_id, floating_ip
+
+
+def deploy(
+    deployment_type, name, environment, flavor_name, key_name, image_name="Ubuntu Server 22.04 LTS R535 CUDA 12.2"
+):
+    if deployment_type == "pytorch":
+        return create_pytorch_vm(name, flavor_name, environment, key_name, image_name)
+    elif deployment_type == "ollama":
+        return create_ollama_vm(name, flavor_name, environment, key_name, image_name)
+    else:
+        raise ValueError("Invalid deployment type. Choose 'pytorch' or 'ollama'.")
 
 
 def main():
@@ -62,22 +77,14 @@ def main():
 
     args = parser.parse_args()
 
-    if args.deployment_type == "pytorch":
-        create_pytorch_vm(
-            name=args.name,
-            flavor_name=args.flavor_name,
-            key_name=args.key_name,
-            image_name=args.image_name,
-            environment=args.environment,
-        )
-    elif args.deployment_type == "ollama":
-        create_ollama_vm(
-            name=args.name,
-            flavor_name=args.flavor_name,
-            key_name=args.key_name,
-            image_name=args.image_name,
-            environment=args.environment,
-        )
+    vm_id, floating_ip = deploy(
+        deployment_type=args.deployment_type,
+        name=args.name,
+        flavor_name=args.flavor_name,
+        key_name=args.key_name,
+        image_name=args.image_name,
+        environment=args.environment,
+    )
 
 
 if __name__ == "__main__":
