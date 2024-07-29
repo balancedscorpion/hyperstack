@@ -4,9 +4,9 @@ import time
 import hyperstack
 
 
-def wait_for_vm_active(vm_id, max_attempts=4, initial_delay=30, delay=10, backoff_factor=1.5):
+def wait_for_vm_active(vm_id, max_attempts=4, initial_delay=20, delay=10, backoff_factor=1.5):
     current_delay = initial_delay
-
+    time.sleep(current_delay)
     for attempt in range(max_attempts):
         vm_details = hyperstack.retrieve_vm_details(vm_id)
         status = vm_details['instance']['status']
