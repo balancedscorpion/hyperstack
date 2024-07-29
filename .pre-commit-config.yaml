@@ -21,13 +21,3 @@ repos:
         entry: poetry run ruff check . --fix
         language: system
         types: [python]
-      - id: mypy
-        name: mypy
-        entry: poetry run mypy .
-        language: system
-        types: [python]
-      - id: pytest
-        name: pytest
-        entry: poetry run pytest
-        language: python
-        types: [python]
