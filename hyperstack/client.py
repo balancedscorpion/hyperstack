@@ -92,6 +92,7 @@ class Hyperstack:
     resize_virtual_machine = virtual_machines.resize_virtual_machine
     update_virtual_machine_labels = virtual_machines.update_virtual_machine_labels
     get_floating_ip = virtual_machines.get_floating_ip
+    wait_for_vm_active = virtual_machines.wait_for_vm_active
 
     # Forward methods from volumes module
     create_volume = volumes.create_volume
