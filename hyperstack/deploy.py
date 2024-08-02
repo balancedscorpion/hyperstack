@@ -6,7 +6,7 @@ import hyperstack
 
 
 def create_pytorch_vm(
-    name, flavor_name, environment, key_name, image_name="Ubuntu Server 22.04 LTS R535 CUDA 12.2", username, password=None, docker_image=None
+    name, flavor_name, environment, key_name, image_name="Ubuntu Server 22.04 LTS R535 CUDA 12.2", username=None, password=None, docker_image=None
 ):
     """
     password is the password created for the user within the Docker container. It's randomly generated and printed out in the std out if not entered.
