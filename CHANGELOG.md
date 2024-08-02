@@ -1,12 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## 0.2.6 - 2024-08-01
+
+### Added
+
+* New CLI to allow deploying Ollama and Pytorch server with "hyperstack" command.
+
 ## 0.2.5 - 2024-07-31
 
 ### Added
 
 * Removed hard-coded password argument from dockeruser for one-click deployments, improving security.
-*
 
 ## 0.2.4 - 2024-07-29
 
