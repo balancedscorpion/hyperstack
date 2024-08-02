@@ -1,4 +1,3 @@
-import argparse
 import time
 import uuid
 
@@ -6,7 +5,14 @@ import hyperstack
 
 
 def create_pytorch_vm(
-    name, flavor_name, environment, key_name, image_name="Ubuntu Server 22.04 LTS R535 CUDA 12.2", username=None, password=None, docker_image=None
+    name,
+    flavor_name,
+    environment,
+    key_name,
+    image_name="Ubuntu Server 22.04 LTS R535 CUDA 12.2",
+    username=None,
+    password=None,
+    docker_image=None,
 ):
     """
     password is the password created for the user within the Docker container. It's randomly generated and printed out in the std out if not entered.
@@ -26,7 +32,7 @@ def create_pytorch_vm(
         DOCKER_IMAGE = "balancedscorpion/python3-pytorch-ubuntu:latest"
     else:
         DOCKER_IMAGE = docker_image
-        
+
     response = hyperstack.create_vm(
         name=name,
         image_name=image_name,
@@ -47,6 +53,7 @@ def create_pytorch_vm(
     print(f"Public IP: {floating_ip}")
     print(f"In container credentials:\nusername: dockeruser\nPassword: {USER_PASSWORD}")
     return vm_id, floating_ip
+
 
 def create_ollama_vm(name, flavor_name, environment, key_name, image_name="Ubuntu Server 22.04 LTS R535 CUDA 12.2"):
     hyperstack.set_environment(environment)
