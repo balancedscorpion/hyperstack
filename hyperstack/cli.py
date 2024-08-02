@@ -32,7 +32,10 @@ def main():
             environment=args.environment,
             flavor_name=args.flavor_name,
             key_name=args.key_name,
-            image_name=args.image_name
+            image_name=args.image_name,
+            username=args.username,
+            password=args.password,
+            docker_image=args.docker_image
         )
     elif args.command == "ollama":
         deploy.create_ollama_vm(

@@ -23,9 +23,10 @@ def create_pytorch_vm(
         USER_NAME = username
 
     if docker_image is None:
-        DOCKER_IMAGE = "balancedscorpion/"
+        DOCKER_IMAGE = "balancedscorpion/python3-pytorch-ubuntu:latest"
     else:
         DOCKER_IMAGE = docker_image
+        
     response = hyperstack.create_vm(
         name=name,
         image_name=image_name,

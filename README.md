@@ -66,7 +66,7 @@ Before you make any deployments, ensure you have set up your environment and [ss
 First set-up your ssh key and environment. Then navigate to the hyperstack library and run:
 
 ```bash
-python3 hyperstack/deploy.py ollama --name ollama-server --flavor_name n2-RTX-A5000x1 --key_name your-key --environment your-environment
+hyperstack ollama --name ollama-server --flavor_name n2-RTX-A5000x1 --key_name your-key --environment your-environment
 ```
 
 
@@ -75,7 +75,7 @@ python3 hyperstack/deploy.py ollama --name ollama-server --flavor_name n2-RTX-A5
 The same command as above, but change ollama to pytorch
 
 ```bash
-python3 hyperstack/deploy.py pytorch --name ollama-server --flavor_name n2-RTX-A5000x1 --key_name your-key --environment your-environment
+hyperstack pytorch --name ollama-server --flavor_name n2-RTX-A5000x1 --key_name your-key --environment your-environment
 ```
 
 
@@ -99,7 +99,7 @@ deploy(deployment_type="ollama", name="ollama-vm", environment="your-environment
 Here's a sample command to run the deployment.
 
 ```bash
-python3 hyperstack/deploy.py pytorch --name ollama-server --flavor_name n2-RTX-A5000x1 --key_name your-key --environment your-environment
+hyperstack pytorch --name ollama-server --flavor_name n2-RTX-A5000x1 --key_name your-key --environment your-environment
 ```
 
 After you run a command (for example the Pytorch server), you will receive the requested configuration and useful details will print out.
