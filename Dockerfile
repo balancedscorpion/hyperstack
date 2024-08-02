@@ -70,5 +70,7 @@ RUN pip3 install --user --no-cache-dir \
     torchaudio==2.4.0 \
     notebook==7.2.1
 
+RUN newgrp docker
+
 # Set the default command to keep the container running
 CMD ["/bin/bash"]
