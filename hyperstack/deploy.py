@@ -23,7 +23,7 @@ def create_pytorch_vm(
         USER_NAME = username
 
     if docker_image is None:
-        DOCKER_IMAGE = uuid.uuid4()
+        DOCKER_IMAGE = "balancedscorpion/"
     else:
         DOCKER_IMAGE = docker_image
     response = hyperstack.create_vm(
